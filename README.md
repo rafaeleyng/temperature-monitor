@@ -2,7 +2,7 @@
 
 THIS IS A WIP
 
-A personal project to give a complete solution to control the temperature of an environment, see temperature reports, setup a expected temperature range and receive and notifications when the temperature gets out of the desired range. It includes:
+A personal project to give a complete solution to monitor the temperature of an environment, see temperature reports, setup a expected temperature range and receive and notifications when the temperature gets out of the desired range. It includes:
 
 - a sensor (built with NodeMCU) that measures the temperature of its environment and sends it to an URL, using WiFi
 
