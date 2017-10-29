@@ -6,6 +6,7 @@ var docClient = new AWS.DynamoDB.DocumentClient()
 
 var params = {
   TableName : 'measurements',
+  ProjectionExpression: '#timestamp, temperature',
   KeyConditionExpression: 'sensorId = :sensorId',
   ExpressionAttributeValues: {
     ':sensorId': '1'

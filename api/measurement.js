@@ -30,7 +30,7 @@ module.exports.submit = (event, context, callback) => {
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          message: 'Measurement submited!',
+          message: 'Measurement submited',
           data: item,
         }),
       }
@@ -45,6 +45,7 @@ module.exports.queryLast = (event, context, callback) => {
 
   var params = {
     TableName : 'measurements',
+    ProjectionExpression: '#timestamp, temperature',
     KeyConditionExpression: 'sensorId = :sensorId',
     ExpressionAttributeValues: {
       ':sensorId': sensorId,
@@ -62,8 +63,49 @@ module.exports.queryLast = (event, context, callback) => {
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          message: 'Query succeeded!',
+          message: `Last measurement for sensorId ${sensorId}`,
           data: data.Items[0],
+        }),
+      }
+
+      callback(null, response)
+    }
+  })
+}
+
+module.exports.queryRange = (event, context, callback) => {
+  const sensorId = event.pathParameters.sensorId
+  const fromEpoch = parseInt(event.queryStringParameters.from)
+  const toEpoch = parseInt(event.queryStringParameters.to) || (new Date()).valueOf()
+
+  const fromTimestamp = (new Date(fromEpoch)).toISOString()
+  const toTimestamp = (new Date(toEpoch)).toISOString()
+
+  var params = {
+    TableName : 'measurements',
+    ProjectionExpression: '#timestamp, temperature',
+    KeyConditionExpression: 'sensorId = :sensorId AND #timestamp BETWEEN :fromTimestamp AND :toTimestamp',
+    ExpressionAttributeNames: {
+      '#timestamp': 'timestamp',
+    },
+    ExpressionAttributeValues: {
+      ':sensorId': sensorId,
+      ':fromTimestamp': fromTimestamp,
+      ':toTimestamp': toTimestamp,
+    },
+  }
+
+  docClient.query(params, (err, data) => {
+    if (err) {
+      console.error('Unable to query. Error:', JSON.stringify(err, null, 2))
+      callback(err);
+    } else {
+      console.log('Query succeeded:', data)
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: `Last measurement for sensorId ${sensorId} for range ${fromTimestamp} - ${toTimestamp}`,
+          data: data.Items,
         }),
       }
 

@@ -31,6 +31,13 @@ functions:
       - http:
           path: measurements/last/{sensorId}
           method: get
+  queryRangeMeasurement:
+    handler: measurement.queryRange
+    description: Query the temperatures submited for a given sensor and a time range from now backwards
+    events:
+      - http:
+          path: measurements/range/{sensorId}
+          method: get
 
 resources:
   Resources:

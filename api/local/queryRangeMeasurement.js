@@ -1,19 +1,33 @@
 var AWS = require('aws-sdk')
+var parseDuration = require('parse-duration')
 
 AWS.config.loadFromPath('./config.json')
 
 var docClient = new AWS.DynamoDB.DocumentClient()
 
+const intervalStr = '160m'
+const intervalMs = parseDuration(intervalStr)
+
+const now = new Date()
+const limitDate = new Date(now.valueOf() - intervalMs)
+
+const fromTimestamp = limitDate.toISOString()
+const toTimestamp = now.toISOString()
+
+console.log('# fromTimestamp', fromTimestamp)
+console.log('# toTimestamp', toTimestamp)
+
 var params = {
   TableName : 'measurements',
+  ProjectionExpression: '#timestamp, temperature',
   KeyConditionExpression: 'sensorId = :sensorId AND #timestamp BETWEEN :fromTimestamp AND :toTimestamp',
   ExpressionAttributeNames: {
     '#timestamp': 'timestamp',
   },
   ExpressionAttributeValues: {
     ':sensorId': '1',
-    ':fromTimestamp': '2017-10-29T02:11:25.523Z',
-    ':toTimestamp': '2017-10-29T19:47:14.237Z',
+    ':fromTimestamp': fromTimestamp,
+    ':toTimestamp': toTimestamp,
   },
 }
 
