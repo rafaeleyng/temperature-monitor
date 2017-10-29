@@ -1,10 +1,11 @@
 #include <ESP8266WiFi.h>
 
-const char* ssid = "ssid of my wifi connection";
-const char* password = "password of my wifi connection";
-const char* host = "address of the server";
+const char* ssid = "<ssid of my wifi connection>";
+const char* password = "<password of my wifi connection>";
+const char* host = "<server host>";
 const char* clientId = "1";
 
+int loopInterval = 60000;
 int ThermistorPin = 0;
 int Vo;
 float R1 = 10000;
@@ -15,44 +16,31 @@ void setup() {
   Serial.begin(9600);
   delay(10);
 
-  // We start by connecting to a WiFi network
+  pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
 
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
-  /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
-     would try to act as both a client and an access-point and could cause
-     network-issues with your other WiFi-devices on your WiFi-network. */
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
   }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
-int value = 0;
+int actualLoopInterval = loopInterval - 600;
 
 void loop() {
-  delay(5000);
-  ++value;
+  delay(actualLoopInterval);
 
-  Serial.print("connecting to ");
-  Serial.println(host);
-
-  // Use WiFiClient class to create TCP connections
   WiFiClient client;
-  const int httpPort = 3000;
+  const int httpPort = 80;
+
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
+  digitalWrite(LED_BUILTIN, HIGH);
+
   if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
     return;
   }
 
@@ -62,14 +50,14 @@ void loop() {
   T = (1.0 / (c1 + c2 * logR2 + c3 * logR2 * logR2 * logR2));
   T = T - 273.15;
 
-  // We now create a URI for the request
-  String url = "/sensor/";
+  String url = "/dev/measurements/submit/";
   url += clientId;
   url += "?temperature=";
   url += T;
 
-  Serial.print("Requesting URL: ");
-  Serial.println(url);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
+  digitalWrite(LED_BUILTIN, HIGH);
 
   // This will send the request to the server
   client.print(String("GET ") + url + " HTTP/1.1\r\n" +
@@ -84,12 +72,7 @@ void loop() {
     }
   }
 
-  // Read all the lines of the reply from server and print them to Serial
-  while(client.available()){
-    String line = client.readStringUntil('\r');
-    Serial.print(line);
-  }
-
-  Serial.println();
-  Serial.println("closing connection");
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
