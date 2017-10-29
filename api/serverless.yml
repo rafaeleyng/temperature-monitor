@@ -1,0 +1,58 @@
+service: temperature-monitor-api
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
+
+functions:
+  submitMeasurement:
+    handler: measurement.submit
+    description: Submit temperature for a given sensor
+    events:
+      - http:
+          path: measurements/submit/{sensorId}
+          method: get
+  queryLastMeasurement:
+    handler: measurement.queryLast
+    description: Query the last temperature submited for a given sensor
+    events:
+      - http:
+          path: measurements/last/{sensorId}
+          method: get
+
+resources:
+  Resources:
+    MeasurementsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: measurements
+        AttributeDefinitions:
+          -
+            AttributeName: "sensorId"
+            AttributeType: "S"
+          -
+            AttributeName: "timestamp"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "sensorId"
+            KeyType: "HASH"
+          -
+            AttributeName: "timestamp"
+            KeyType: "RANGE"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
