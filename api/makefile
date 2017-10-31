@@ -1,4 +1,4 @@
-.PHONY: deploy
+.PHONY: setup deploy
 
 setup:
 	yarn global add serveless

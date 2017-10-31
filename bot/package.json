@@ -1,0 +1,15 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Rafael Eyng <rafaeleyng@gmail.com> (https://github.com/rafaeleyng)",
+  "license": "MIT",
+  "scripts": {
+    "start" : "node bot.js"
+  },
+  "dependencies": {
+    "axios": "^0.17.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3"
+  }
+}
