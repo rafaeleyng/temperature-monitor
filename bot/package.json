@@ -5,11 +5,14 @@
   "author": "Rafael Eyng <rafaeleyng@gmail.com> (https://github.com/rafaeleyng)",
   "license": "MIT",
   "scripts": {
-    "start" : "node bot.js"
+    "deploy": "env $(cat .env | xargs) ./scripts/deploy.sh",
+    "start": "node server.js",
+    "test": "mocha -R spec",
+    "test-w": "mocha -w -R spec"
   },
   "dependencies": {
     "axios": "^0.17.0",
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3"
+    "moment": "^2.19.1",
+    "node-telegram-bot-api": "^0.29.0"
   }
 }
