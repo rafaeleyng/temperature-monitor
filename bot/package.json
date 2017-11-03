@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "deploy": "env $(cat .env | xargs) ./scripts/deploy.sh",
-    "start": "node server.js",
+    "start": "node index.js",
     "test": "mocha -R spec",
     "test-w": "mocha -w -R spec"
   },
