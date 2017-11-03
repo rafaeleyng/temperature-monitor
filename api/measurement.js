@@ -47,6 +47,9 @@ module.exports.queryLast = (event, context, callback) => {
     TableName : 'measurements',
     ProjectionExpression: '#timestamp, temperature',
     KeyConditionExpression: 'sensorId = :sensorId',
+    ExpressionAttributeNames: {
+      '#timestamp': 'timestamp',
+    },
     ExpressionAttributeValues: {
       ':sensorId': sensorId,
     },
