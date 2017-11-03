@@ -4,9 +4,11 @@ var AWS = require('aws-sdk')
 
 var docClient = new AWS.DynamoDB.DocumentClient()
 
+var round = require('lodash.round')
+
 module.exports.submit = (event, context, callback) => {
   const sensorId = event.pathParameters.sensorId
-  const temperature = parseFloat(event.queryStringParameters.temperature)
+  const temperature = round(parseFloat(event.queryStringParameters.temperature), 1)
   const timestamp = (new Date).toISOString()
 
   const item = {
