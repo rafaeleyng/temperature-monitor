@@ -1,6 +1,7 @@
 const axios = require('axios')
 const moment = require('moment')
 const parseDuration = require('parse-duration')
+const ChartjsNode = require('chartjs-node')
 
 const { API_URL, TELEGRAM_TOKEN } = process.env
 
@@ -82,8 +83,44 @@ bot.onText(/\/range (.+)/, (msg, match) => {
         return
       }
 
-      bot.sendMessage(chatId, JSON.stringify(data))
+      var chartJsOptions = {
+        type: 'line',
+        data: {
+          labels: data.map(d => moment(d.timestamp).format('DD/MM/YY hh:mm:ss')),
+          datasets: [
+            {
+              label: "Sensor temperature",
+              backgroundColor: 'rgba(54, 162, 235, 1)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              data: data.map(d => d.temperature),
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMin: 10,
+                  suggestedMax: 30,
+                }
+              },
+            ],
+          },
+        },
+      }
+
+      const minWidth = 600
+      const maxWidth = 1200
+      let width = data.length * 10
+      width = Math.max(minWidth, width)
+      width = Math.min(maxWidth, width)
+
+      const chartNode = new ChartjsNode(width, 600)
+      return chartNode.drawChart(chartJsOptions).then(() => chartNode.getImageBuffer('image/png'))
     })
+    .then(buffer => bot.sendPhoto(chatId, buffer))
     .catch(err => {
       console.error(err)
       sendErrorMessage()
