@@ -4,21 +4,44 @@ const ChartjsNode = require('chartjs-node')
 
 const bot = require('../../components/bot')
 const measurementsApi = require('../../components/measurementsApi')
+const rangesApi = require('../../components/rangesApi')
 
-const buildChart = (data) => {
+const buildChart = (measurementsData, rangeData = {}) => {
+  const datasets = [
+    {
+      data: measurementsData.map(d => d.temperature),
+      label: 'sensor',
+      backgroundColor: 'rgba(75, 192, 192, 1)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      fill: false,
+    },
+  ]
+
+  if (rangeData.min) {
+    datasets.push({
+      data: measurementsData.map(d => rangeData.min),
+      label: 'min',
+      backgroundColor: 'rgba(54, 162, 235, 1)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      fill: false,
+    })
+  }
+
+  if (rangeData.max) {
+    datasets.push({
+      data: measurementsData.map(d => rangeData.max),
+      label: 'max',
+      backgroundColor: 'rgba(255, 99, 132, 1)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      fill: false,
+    })
+  }
+
   const chartJsOptions = {
     type: 'line',
     data: {
-      labels: data.map(d => moment(d.timestamp).format('DD/MM - hh:mm')),
-      datasets: [
-        {
-          data: data.map(d => d.temperature),
-          label: 'Sensor temperature',
-          backgroundColor: 'rgba(54, 162, 235, 1)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          fill: false,
-        },
-      ],
+      labels: measurementsData.map(d => moment(d.timestamp).format('DD/MM - hh:mm')),
+      datasets: datasets,
     },
     options: {
       scales: {
@@ -36,7 +59,7 @@ const buildChart = (data) => {
 
   const minWidth = 600
   const maxWidth = 1200
-  let width = data.length * 10
+  let width = measurementsData.length * 10
   width = Math.max(minWidth, width)
   width = Math.min(maxWidth, width)
 
@@ -69,14 +92,19 @@ bot.onText(/\/period (.+)/, (msg, match) => {
 
   const sendErrorMessage = () => bot.sendMessage(chatId, `Unable to get information about sensor ${sensorId}`)
 
-  measurementsApi.period(sensorId, fromEpoch, toEpoch)
+  Promise.all([
+    measurementsApi.period(sensorId, fromEpoch, toEpoch),
+    rangesApi.last(sensorId),
+  ])
     .then(data => {
-      if (!data) {
+      const [ measurementsData, rangeData ] = data
+
+      if (!measurementsData) {
         sendErrorMessage()
         return
       }
 
-      return buildChart(data)
+      return buildChart(measurementsData, rangeData)
     })
     .then(buffer => bot.sendPhoto(chatId, buffer))
     .catch(err => {
