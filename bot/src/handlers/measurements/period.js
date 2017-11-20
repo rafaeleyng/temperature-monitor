@@ -2,8 +2,8 @@ const moment = require('moment')
 const parseDuration = require('parse-duration')
 const ChartjsNode = require('chartjs-node')
 
-const bot = require('../components/bot')
-const measurementsApi = require('../components/measurementsApi')
+const bot = require('../../components/bot')
+const measurementsApi = require('../../components/measurementsApi')
 
 const buildChart = (data) => {
   const chartJsOptions = {

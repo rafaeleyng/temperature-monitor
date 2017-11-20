@@ -1,13 +1,18 @@
 var AWS = require('aws-sdk')
 
-AWS.config.loadFromPath('./config.json')
+AWS.config.loadFromPath('../config.json')
 
 var docClient = new AWS.DynamoDB.DocumentClient()
 
 var params = {
-  TableName : 'measurements',
-  ProjectionExpression: '#timestamp, temperature',
+  TableName : 'ranges',
+  ProjectionExpression: '#timestamp, #min, #max',
   KeyConditionExpression: 'sensorId = :sensorId',
+  ExpressionAttributeNames: {
+    '#timestamp': 'timestamp',
+    '#min': 'min',
+    '#max': 'max',
+  },
   ExpressionAttributeValues: {
     ':sensorId': '1'
   },

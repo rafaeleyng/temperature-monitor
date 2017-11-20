@@ -1,7 +1,7 @@
 const moment = require('moment')
 
-const bot = require('../components/bot')
-const measurementsApi = require('../components/measurementsApi')
+const bot = require('../../components/bot')
+const measurementsApi = require('../../components/measurementsApi')
 
 const buildMessage = (sensorId, temperature, timestamp) => {
   const date = moment(timestamp).format('MMMM Do YYYY, h:mm:ss')

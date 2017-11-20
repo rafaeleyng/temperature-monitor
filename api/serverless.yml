@@ -38,6 +38,20 @@ functions:
       - http:
           path: measurements/period/{sensorId}
           method: get
+  submitRange:
+    handler: range.submit
+    description: Submit valid range for a given sensor
+    events:
+      - http:
+          path: ranges/submit/{sensorId}
+          method: post
+  queryLastRange:
+    handler: range.queryLast
+    description: Query the last range submited for a given sensor
+    events:
+      - http:
+          path: ranges/last/{sensorId}
+          method: get
 
 resources:
   Resources:
@@ -46,6 +60,28 @@ resources:
       DeletionPolicy: Retain
       Properties:
         TableName: measurements
+        AttributeDefinitions:
+          -
+            AttributeName: "sensorId"
+            AttributeType: "S"
+          -
+            AttributeName: "timestamp"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "sensorId"
+            KeyType: "HASH"
+          -
+            AttributeName: "timestamp"
+            KeyType: "RANGE"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    RangeDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ranges
         AttributeDefinitions:
           -
             AttributeName: "sensorId"

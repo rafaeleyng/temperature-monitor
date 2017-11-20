@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk')
 var parseDuration = require('parse-duration')
 
-AWS.config.loadFromPath('./config.json')
+AWS.config.loadFromPath('../config.json')
 
 var docClient = new AWS.DynamoDB.DocumentClient()
 
