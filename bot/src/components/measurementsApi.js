@@ -8,8 +8,8 @@ class MeasurementsApi {
       .then(res => res.data.data)
   }
 
-  range(sensorId, fromEpoch, toEpoch) {
-    return axios.get(`${API_URL}/measurements/range/${sensorId}?from=${fromEpoch}&to=${toEpoch}`)
+  period(sensorId, fromEpoch, toEpoch) {
+    return axios.get(`${API_URL}/measurements/period/${sensorId}?from=${fromEpoch}&to=${toEpoch}`)
       .then(res => res.data.data)
   }
 }

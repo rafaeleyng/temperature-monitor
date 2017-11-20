@@ -78,7 +78,7 @@ module.exports.queryLast = (event, context, callback) => {
   })
 }
 
-module.exports.queryRange = (event, context, callback) => {
+module.exports.queryPeriod = (event, context, callback) => {
   const sensorId = event.pathParameters.sensorId
   const fromEpoch = parseInt(event.queryStringParameters.from)
   const toEpoch = parseInt(event.queryStringParameters.to) || (new Date()).valueOf()
@@ -109,7 +109,7 @@ module.exports.queryRange = (event, context, callback) => {
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          message: `Last measurement for sensorId ${sensorId} for range ${fromTimestamp} - ${toTimestamp}`,
+          message: `Last measurement for sensorId ${sensorId} for period ${fromTimestamp} - ${toTimestamp}`,
           data: data.Items,
         }),
       }

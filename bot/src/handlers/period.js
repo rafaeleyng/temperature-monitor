@@ -44,14 +44,14 @@ const buildChart = (data) => {
   return chartNode.drawChart(chartJsOptions).then(() => chartNode.getImageBuffer('image/png'))
 }
 
-bot.onText(/\/range (.+)/, (msg, match) => {
+bot.onText(/\/period (.+)/, (msg, match) => {
   const chatId = msg.chat.id
   const query = match[1].split(' ')
 
   if (!query[0] || !query[1]) {
     bot.sendMessage(
       chatId,
-      'Please follow the format: `/range sensorId fromOffset [fromOffset]`. For more information, /help',
+      'Please follow the format: `/period sensorId fromOffset [fromOffset]`. For more information, /help',
       { parse_mode: 'Markdown' }
     )
     return
@@ -69,7 +69,7 @@ bot.onText(/\/range (.+)/, (msg, match) => {
 
   const sendErrorMessage = () => bot.sendMessage(chatId, `Unable to get information about sensor ${sensorId}`)
 
-  measurementsApi.range(sensorId, fromEpoch, toEpoch)
+  measurementsApi.period(sensorId, fromEpoch, toEpoch)
     .then(data => {
       if (!data) {
         sendErrorMessage()

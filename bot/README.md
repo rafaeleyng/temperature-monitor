@@ -28,5 +28,6 @@ This deploy is based on [now](https://zeit.co/now).
 Use the command `/setcommands` in a chat with BotFather, and paster these commands:
 
 ```
-last - <sensor id>, last temperature for sensor
+last - <sensor id>
+period - <sensor id> <from offset> [<to offset>]
 ```
