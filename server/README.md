@@ -1,3 +1,0 @@
-# temperature-monitor - the server
-
----
