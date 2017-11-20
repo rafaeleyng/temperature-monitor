@@ -18,35 +18,35 @@ provider:
 
 functions:
   submitMeasurement:
-    handler: measurement.submit
+    handler: src/measurements.submit
     description: Submit temperature for a given sensor
     events:
       - http:
           path: measurements/submit/{sensorId}
           method: get
   queryLastMeasurement:
-    handler: measurement.queryLast
+    handler: src/measurements.queryLast
     description: Query the last temperature submited for a given sensor
     events:
       - http:
           path: measurements/last/{sensorId}
           method: get
   queryPeriodMeasurement:
-    handler: measurement.queryPeriod
+    handler: src/measurements.queryPeriod
     description: Query the temperatures submited for a given sensor and a time period from now backwards
     events:
       - http:
           path: measurements/period/{sensorId}
           method: get
   submitRange:
-    handler: range.submit
+    handler: src/ranges.submit
     description: Submit valid range for a given sensor
     events:
       - http:
           path: ranges/submit/{sensorId}
           method: post
   queryLastRange:
-    handler: range.queryLast
+    handler: src/ranges.queryLast
     description: Query the last range submited for a given sensor
     events:
       - http:
