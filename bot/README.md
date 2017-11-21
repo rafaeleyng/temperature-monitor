@@ -30,4 +30,8 @@ Use the command `/setcommands` in a chat with BotFather, and paster these comman
 ```
 last - <sensor id>
 period - <sensor id> <from offset> [<to offset>]
+range - <sensor id> <from temp> <to temp>
+getrange - <sensor id>
+subscribe - <sensor id>
+unsubscribe - <sensor id>
 ```

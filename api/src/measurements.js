@@ -7,7 +7,7 @@ var docClient = new AWS.DynamoDB.DocumentClient()
 var round = require('lodash.round')
 var request = require('request')
 
-// I feel sorry for this code, but I don't have time to refactor this
+// I feel REALLY sorry for this code, but I don't have time to refactor this
 module.exports.submit = (event, context, callback) => {
   const sensorId = event.pathParameters.sensorId
   const temperature = round(parseFloat(event.queryStringParameters.temperature), 1)
@@ -82,31 +82,60 @@ module.exports.submit = (event, context, callback) => {
               console.log('settingsData:', settingsData)
               const url = settingsData.Item ? settingsData.Item.value : undefined
 
-              if (!range.timestamp || !url) {
-                console.log('########### no notification configured', url, range)
-                callback(null, response)
-              } else {
-                const options = {
-                  uri: url,
-                  method: 'POST',
-                  json: {
-                    chatId: '420301863',
-                  },
-                }
-                request(options, function (error, response, body) {
-                  if (err) {
-                    console.error('Error calling notifier. Error:', JSON.stringify(err, null, 2))
-                    callback(err)
-                  } else {
-                    if (response.statusCode !== 200) {
-                      console.error('Not 200 when calling notifier. Error:', JSON.stringify(err, null, 2))
-                      callback(err)
-                      return
-                    }
-                    callback(null, response)
-                  }
-                })
+              const subscriptionParams = {
+                TableName : 'telegram_subscriptions',
+                ProjectionExpression: 'sensorId, chatId',
+                KeyConditionExpression: 'sensorId = :sensorId',
+                ExpressionAttributeValues: {
+                  ':sensorId': sensorId,
+                },
+                ScanIndexForward: false,
+                Limit: 1,
               }
+
+              docClient.query(subscriptionParams, function(err, subscriptionData) {
+                if (err) {
+                  console.error('Unable to query. Error:', JSON.stringify(err, null, 2))
+                  callback(err);
+                } else {
+                  console.log('Query succeeded.')
+                  const subscription = subscriptionData.Items[0]
+
+                  const isDataIncomplete = !range.timestamp || !url || !subscription
+                  const isTemperatureOk = temperature > range.min && temperature < range.max
+
+                  if (isDataIncomplete || isTemperatureOk) {
+                    console.log('########### no notification configured', url, range, subscription)
+                    callback(null, response)
+                  } else {
+                    const options = {
+                      uri: url,
+                      method: 'POST',
+                      json: {
+                        chatId: subscription.chatId,
+                        sensorId: sensorId,
+                        timestamp: timestamp,
+                        temperature: temperature,
+                        min: range.min,
+                        max: range.max,
+                      },
+                    }
+                    request(options, function (error, response, body) {
+                      if (err) {
+                        console.error('Error calling notifier. Error:', JSON.stringify(err, null, 2))
+                        callback(err)
+                      } else {
+                        if (response.statusCode !== 200) {
+                          console.error('Not 200 when calling notifier. Error:', JSON.stringify(err, null, 2))
+                          callback(err)
+                          return
+                        }
+                        callback(null, response)
+                      }
+                    })
+                  }
+                }
+              })
             }
           })
         }
