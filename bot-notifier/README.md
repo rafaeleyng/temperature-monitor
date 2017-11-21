@@ -1,5 +1,7 @@
 # temperature-monitor-bot
 
+This bot receives commands from the user and communicates with the API.
+
 ## Create the bot
 
 Create the bot using the BotFather, on Telegram App.
@@ -20,8 +22,6 @@ This deploy is based on [now](https://zeit.co/now).
   ```
   yarn deploy
   ```
-
----
 
 ## Set bot commands
 
