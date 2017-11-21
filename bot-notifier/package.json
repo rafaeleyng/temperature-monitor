@@ -1,5 +1,5 @@
 {
-  "name": "bot",
+  "name": "bot-notifier",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Rafael Eyng <rafaeleyng@gmail.com> (https://github.com/rafaeleyng)",
@@ -9,13 +9,11 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "axios": "^0.17.0",
+    "axios": "^0.17.1",
     "axios-debug-log": "^0.4.0",
-    "chart.js": "^2.7.1",
-    "chartjs-node": "^1.6.0",
-    "moment": "^2.19.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
     "node-telegram-bot-api": "^0.29.0",
-    "parse-duration": "^0.1.1",
     "simple-node-logger": "^0.93.33"
   }
 }
