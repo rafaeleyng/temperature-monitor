@@ -1,3 +1,4 @@
+const log = require('../../components/logger')
 const moment = require('moment')
 
 const bot = require('../../components/bot')
@@ -12,7 +13,10 @@ const buildMessage = (sensorId, temperature, timestamp) => {
 on ${date}`
 }
 
+log.info('registering ranges/submit')
+
 bot.onText(/\/range (.+)/, (msg, match) => {
+  log.info('handling ranges/submit')
   const chatId = msg.chat.id
   const query = match[1].split(' ')
 

@@ -4,26 +4,17 @@ var AWS = require('aws-sdk')
 
 var docClient = new AWS.DynamoDB.DocumentClient()
 
-var round = require('lodash.round')
-
 module.exports.submit = (event, context, callback) => {
   const data = JSON.parse(event.body)
-
-  const sensorId = event.pathParameters.sensorId
-  const timestamp = (new Date).toISOString()
-
-  const min = round(parseFloat(data.min), 1)
-  const max = round(parseFloat(data.max), 1)
+  const { key, value } = data
 
   const item = {
-    'sensorId': sensorId,
-    'timestamp': timestamp,
-    'min': min,
-    'max': max,
+    key,
+    value,
   }
 
   var params = {
-    TableName: 'ranges',
+    TableName: 'settings',
     Item: item,
   }
 
@@ -37,7 +28,7 @@ module.exports.submit = (event, context, callback) => {
       const response = {
         statusCode: 200,
         body: JSON.stringify({
-          message: 'Range submited',
+          message: 'Setting submited',
           data: item,
         }),
       }

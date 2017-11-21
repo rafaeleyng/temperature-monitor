@@ -14,6 +14,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:DeleteItem
       Resource: "*"
 
 functions:
@@ -52,6 +53,27 @@ functions:
       - http:
           path: ranges/last/{sensorId}
           method: get
+  submitSetting:
+    handler: src/settings.submit
+    description: Submit a setting
+    events:
+      - http:
+          path: settings/submit
+          method: post
+  telegramSubscribe:
+    handler: src/telegramSubscriptions.subscribe
+    description: Subscribe to receive notifications for a sensor
+    events:
+      - http:
+          path: telegram-subscriptions/subscribe/{sensorId}/{chatId}
+          method: post
+  telegramUnsubscribe:
+    handler: src/telegramSubscriptions.unsubscribe
+    description: Unsubscribe to stop receiving notifications for a sensor
+    events:
+      - http:
+          path: telegram-subscriptions/unsubscribe/{sensorId}/{chatId}
+          method: post
 
 resources:
   Resources:
@@ -95,6 +117,44 @@ resources:
             KeyType: "HASH"
           -
             AttributeName: "timestamp"
+            KeyType: "RANGE"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    SettingsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: settings
+        AttributeDefinitions:
+          -
+            AttributeName: "key"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "key"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    TelegramSubscriptionsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: telegram_subscriptions
+        AttributeDefinitions:
+          -
+            AttributeName: "sensorId"
+            AttributeType: "S"
+          -
+            AttributeName: "chatId"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "sensorId"
+            KeyType: "HASH"
+          -
+            AttributeName: "chatId"
             KeyType: "RANGE"
         ProvisionedThroughput:
           ReadCapacityUnits: 1

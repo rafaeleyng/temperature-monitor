@@ -1,3 +1,4 @@
+const log = require('../../components/logger')
 const moment = require('moment')
 const parseDuration = require('parse-duration')
 const ChartjsNode = require('chartjs-node')
@@ -67,7 +68,10 @@ const buildChart = (measurementsData, rangeData = {}) => {
   return chartNode.drawChart(chartJsOptions).then(() => chartNode.getImageBuffer('image/png'))
 }
 
+log.info('registering measurements/period')
+
 bot.onText(/\/period (.+)/, (msg, match) => {
+  log.info('handling measurements/period')
   const chatId = msg.chat.id
   const query = match[1].split(' ')
 

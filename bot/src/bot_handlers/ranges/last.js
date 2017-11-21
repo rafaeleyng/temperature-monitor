@@ -1,3 +1,4 @@
+const log = require('../../components/logger')
 const moment = require('moment')
 
 const bot = require('../../components/bot')
@@ -12,7 +13,10 @@ between *${min} C°* and *${max} C°*
 set on ${date}`
 }
 
+log.info('registering ranges/last')
+
 bot.onText(/\/getrange (.+)/, (msg, match) => {
+  log.info('handling ranges/last')
   const chatId = msg.chat.id
   const sensorId = match[1]
 
