@@ -1,8 +1,6 @@
 # temperature-monitor
 
-THIS IS A WIP
-
-A personal project to give a complete solution to monitor the temperature of an environment, see temperature reports, setup a expected temperature range and receive and notifications when the temperature gets out of the desired range. It includes:
+A personal project to provide a complete solution to monitor the temperature of an environment, see temperature reports, setup a expected temperature range and receive and notifications when the temperature gets out of the desired range. It includes:
 
 - a [sensor](./sensor) (built with NodeMCU) that measures the temperature of its environment and sends it to an URL, using WiFi
 
@@ -13,3 +11,7 @@ A personal project to give a complete solution to monitor the temperature of an 
 - [NOT IMPLEMENTED YET] a mobile app (built with React Native) that displays sensors temperature reports, and allows users to setup valid temperature ranges for sensors, to receive alerts when the temperature measured by the sensor gets too high or too low
 
 This repository also contains configuration for a [reverse proxy](./reverse-proxy) that was needed to communicate the NodeMCU with AWS Lambda.
+
+## Architecture
+
+![cloudcraft](https://user-images.githubusercontent.com/4842605/33237530-be6521b6-d25c-11e7-83d5-ab5025bc21ed.png)
