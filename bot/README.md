@@ -35,3 +35,14 @@ getrange - <sensor id>
 subscribe - <sensor id>
 unsubscribe - <sensor id>
 ```
+
+
+## Examples
+
+![bot list commands](https://user-images.githubusercontent.com/4842605/33105270-7896bbbe-cf13-11e7-9819-eddbbaffd35a.png)
+
+![bot start range period](https://user-images.githubusercontent.com/4842605/33105269-78747db0-cf13-11e7-81f5-404b7fef6d3d.png)
+
+![bot plot](https://user-images.githubusercontent.com/4842605/33105268-784ede02-cf13-11e7-8ca4-a5bb1040af93.jpeg)
+
+![bot getrange subscribe notification unsubscribe](https://user-images.githubusercontent.com/4842605/33105267-7828b72c-cf13-11e7-9d3a-ce8067942b53.png)
