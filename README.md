@@ -8,7 +8,7 @@ A personal project to provide a complete solution to monitor the temperature of 
 
 - a Telegram chat bot [1](./bot) [2](./bot-notifier) that displays sensors temperature reports, and allows users to setup valid temperature ranges for sensors, to receive alerts when the temperature measured by the sensor gets too high or too low
 
-- [NOT IMPLEMENTED YET] a mobile app (built with React Native) that displays sensors temperature reports, and allows users to setup valid temperature ranges for sensors, to receive alerts when the temperature measured by the sensor gets too high or too low
+- a [mobile app](./app) (built with React Native) that displays sensors temperature reports, and allows users to setup valid temperature ranges for sensors, to receive alerts when the temperature measured by the sensor gets too high or too low
 
 This repository also contains configuration for a [reverse proxy](./reverse-proxy) that was needed to communicate the NodeMCU with AWS Lambda.
 
