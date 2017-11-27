@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 
 import {
+  StatusBar,
   Text,
   View,
 } from 'react-native'
+
+import moment from 'moment'
 
 import Loader from '../common/Loader'
 import MeasurementFilter from '../common/MeasurementFilter'
@@ -64,17 +67,26 @@ export default class LastTemperature extends Component {
   renderResult() {
     const { data, sensorId } = this.state
     const { temperature, timestamp } = data
+    const date = moment(timestamp).format('MMMM Do YYYY, h:mm:ss')
 
     return (
-      <View style={styles.containerTitle} >
-        <Text>{`Last temperature for sensor ${sensorId}`}</Text>
+      <View>
+        <Text
+          style={styles.subtitleText}
+        >
+          {`Last temperature for sensor ${sensorId}`}
+        </Text>
         <Text
           style={styles.bigText}
           onPress={this.getData}
         >
-          {temperature}
+          {`${temperature} C°`}
         </Text>
-        <Text style={styles.subtitleText}>{timestamp}</Text>
+        <Text
+          style={styles.subtitleText}
+        >
+          {`Measured on ${date}`}
+        </Text>
       </View>
     )
   }
@@ -95,6 +107,7 @@ export default class LastTemperature extends Component {
 
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="dark-content" hidden />
         <ScreenTitle text={LastTemperature.navigationOptions.drawerLabel} />
         <MeasurementFilter
           value={this.state.sensorId}

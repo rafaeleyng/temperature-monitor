@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import {
+  StatusBar,
   View,
 } from 'react-native'
 
@@ -119,6 +120,7 @@ export default class PeriodTemperature extends Component {
 
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="dark-content" hidden />
         <ScreenTitle text={PeriodTemperature.navigationOptions.drawerLabel} />
         <MeasurementFilter
           value={this.state.sensorId}

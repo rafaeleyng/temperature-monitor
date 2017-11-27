@@ -6,20 +6,21 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 50,
   },
-  containerInput: {
-    flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
+
+  screenTitle: {
+    fontSize: 30,
+    textAlign: 'center',
+    marginBottom: 30,
   },
-  containerTitle: {
-    flex: 2,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // backgroundColor: 'powderblue',
+
+  measurementFilter: {
+    marginBottom: 30,
   },
+
   subtitleBlock: {
     height: 50,
   },

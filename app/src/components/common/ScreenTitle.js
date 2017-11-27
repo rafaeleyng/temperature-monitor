@@ -6,9 +6,15 @@ import {
   Text,
 } from 'react-native'
 
+import styles from '../../styles'
+
 const ScreenTitle = ({ text }) => (
-  <View >
-    <Text>{text}</Text>
+  <View>
+    <Text
+      style={styles.screenTitle}
+    >
+      {text}
+    </Text>
   </View>
 )
 

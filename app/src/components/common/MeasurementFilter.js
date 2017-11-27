@@ -7,13 +7,14 @@ import {
   TextInput,
 } from 'react-native'
 
+import styles from '../../styles'
+
 const SensorInput = ({
-  style,
   value,
   onChangeText,
   onPressButton,
 }) => (
-  <View style={style}>
+  <View style={styles.measurementFilter}>
     <TextInput
       placeholder="Sensor id"
       style={{
@@ -21,6 +22,7 @@ const SensorInput = ({
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
+        marginBottom: 10,
       }}
       onChangeText={onChangeText}
       value={value}
@@ -34,14 +36,9 @@ const SensorInput = ({
 )
 
 SensorInput.propTypes = {
-  style: PropTypes.object,
   value: PropTypes.string.isRequired,
   onChangeText: PropTypes.func.isRequired,
   onPressButton: PropTypes.func.isRequired,
-}
-
-SensorInput.defaultProps = {
-  style: {},
 }
 
 export default SensorInput
