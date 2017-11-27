@@ -21,14 +21,12 @@ export default StyleSheet.create({
     marginBottom: 30,
   },
 
-  subtitleBlock: {
-    height: 50,
-  },
   bigText: {
     fontSize: 70,
     fontWeight: 'bold',
     textAlign: 'center',
   },
+
   subtitleText: {
     textAlign: 'center',
   },
